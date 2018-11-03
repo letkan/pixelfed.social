@@ -33,6 +33,7 @@ import android.os.AsyncTask;
 import android.widget.ProgressBar;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int FCR=1;
     //select whether you want to upload multiple files (set 'true' for yes)
     private boolean multiple_files = false;
+    private SwipeRefreshLayout swiperefresh;
     
      @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         spinner = (ProgressBar)findViewById(R.id.loadingSpinner);
         progress1 = (ProgressBar)findViewById(R.id.progressBar1);
         showloading = (TextView)findViewById(R.id.editText1);
+        swiperefresh = (SwipeRefreshLayout)this.findViewById(R.id.swipeContainer);
        
 		WebSettings webSettings = xxxview.getSettings();
         xxxview.getSettings().setJavaScriptEnabled(true);
@@ -118,10 +121,12 @@ public class MainActivity extends AppCompatActivity {
         xxxview.setOverScrollMode(WebView.OVER_SCROLL_NEVER);
         xxxview.getSettings().setAllowFileAccess(true);
         //------------------- theoretical speedup -------------
-		xxxview.getSettings().setAppCacheMaxSize( 7 * 1024 * 1024 ); // 7MB
+        xxxview.getSettings().setAppCacheEnabled(true);
+		xxxview.getSettings().setAppCacheMaxSize( 10 * 1024 * 1024 ); // 8MB
 		xxxview.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
 		xxxview.getSettings().setAllowFileAccess( true );
 		xxxview.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT );
+		
 		//---------------------
        
        if(Build.VERSION.SDK_INT >= 21){
@@ -137,6 +142,21 @@ public class MainActivity extends AppCompatActivity {
 		xxxview.setWebViewClient(new CustomWebViewClient());
         
         xxxview.loadUrl("https://pixelfed.social"); //
+        
+        //swipe down to refresh page
+        swiperefresh.setOnRefreshListener(
+		new SwipeRefreshLayout.OnRefreshListener() {
+			
+		@Override
+		public void onRefresh() {			
+        xxxview.reload();
+        swiperefresh.setEnabled(true);
+        swiperefresh.setRefreshing(false);       
+		}
+		}		
+		);
+		
+		
         
         xxxview.setWebChromeClient(new WebChromeClient() {
 			
