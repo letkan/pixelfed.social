@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     tools:context=".MainActivity">
+    
+    <android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipeContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+	<!--android.support.v4.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"-->
 
     <WebView
         android:id="@+id/xxxView"
@@ -21,6 +31,9 @@
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        
+        <!--/android.support.v4.widget.NestedScrollView-->
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/loadingSpinner"
@@ -59,7 +72,7 @@
         android:inputType="none"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="Loading Site"
+        android:text="@string/load_site"
         android:textColor="#2872cb"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
